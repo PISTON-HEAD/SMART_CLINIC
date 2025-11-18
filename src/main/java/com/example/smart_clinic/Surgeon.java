@@ -1,4 +1,4 @@
-package com.example.clinic;
+package com.example.smart_clinic;
 
 public class Surgeon extends Doctor {
     private double surgeryFee;

@@ -1,16 +1,14 @@
-package com.example.clinic;
-
-import java.time.LocalDateTime;
+package com.example.smart_clinic;
 
 public class Appointment {
     private int appointmentId;
-    private LocalDateTime date;
+    private String date;
     private String type;
     private String status;
     private Patient patient;
     private Doctor doctor;
 
-    public Appointment(int appointmentId, LocalDateTime date,
+    public Appointment(int appointmentId, String date,
             String type,
             Patient patient, Doctor doctor) {
         this.appointmentId = appointmentId;
@@ -30,11 +28,11 @@ public class Appointment {
         this.appointmentId = appointmentId;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -83,4 +81,5 @@ public class Appointment {
     public double calculateBill() {
         return doctor.calculateCharges();
     }
+
 }

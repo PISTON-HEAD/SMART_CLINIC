@@ -1,7 +1,4 @@
-package com.example.clinic;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.example.smart_clinic;
 
 public class Patient {
     private int patientId;
