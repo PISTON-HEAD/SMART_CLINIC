@@ -1,6 +1,8 @@
 package com.example.smart_clinic.service_layer;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import com.example.smart_clinic.Appointment;
 import com.example.smart_clinic.Doctor;
@@ -20,4 +22,16 @@ public interface ClinicService {
     ArrayList<Patient> getAllPatients();
 
     ArrayList<Appointment> getAppointmentsByDoctor(int doctorId);
+
+    ArrayList<Appointment> getCompletedAppointmentsByDoctor(int doctorId);
+
+    List<Appointment> getAppointmentsByDoctorSortedByDate(int doctorId);
+
+    double getAverageBillForDoctor(int doctorId);
+
+    Doctor getTopEarningDoctor();
+
+    Map<String, List<Appointment>> getAppointmentsGroupedByType();
+
+    ArrayList<Patient> getFrequentPatients(int minVisits);
 }

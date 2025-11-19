@@ -2,6 +2,8 @@ package com.example.smart_clinic.service_layer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -111,6 +113,51 @@ public class MockService implements ClinicService {
       return appointments.stream().filter(i -> i.getDoctor().getId() == doctorId)
             .collect(Collectors.toCollection(ArrayList::new));
 
+   }
+
+   @Override
+   public ArrayList<Appointment> getCompletedAppointmentsByDoctor(int doctorId) {
+      return appointments.stream().filter(i -> i.getDoctor().getId() == doctorId && i.getStatus().equals("Completed"))
+            .collect(Collectors.toCollection(ArrayList::new));
+   }
+
+   @Override
+   public List<Appointment> getAppointmentsByDoctorSortedByDate(int doctorId) {
+      return appointments.stream().filter(i -> i.getDoctor().getId() == doctorId)
+            .sorted(Comparator.comparing(Appointment::getDate)).collect(Collectors.toList());
+   }
+
+   @Override
+   public double getAverageBillForDoctor(int doctorId) {
+      double avg = appointments.stream().filter(i -> i.getDoctor().getId() == doctorId)
+            .mapToDouble(Appointment::calculateBill).average().orElse(0.0);
+      return avg;
+   }
+
+   @Override
+   public Doctor getTopEarningDoctor() {
+
+      return appointments.stream()
+            .collect(Collectors.groupingBy(
+                  Appointment::getDoctor,
+                  Collectors.summingDouble(Appointment::calculateBill)))
+            .entrySet()
+            .stream()
+            .max(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .orElse(null);
+   }
+
+   @Override
+   public Map<String, List<Appointment>> getAppointmentsGroupedByType() {
+      return appointments.stream().collect(Collectors.groupingBy(Appointment::getType));
+   }
+
+   @Override
+   public ArrayList<Patient> getFrequentPatients(int minVisits) {
+      return appointments.stream().collect(Collectors.groupingBy(Appointment::getPatient)).entrySet().stream()
+            .filter(i -> i.getValue().size() >= minVisits).map(Map.Entry::getKey)
+            .collect(Collectors.toCollection(ArrayList::new));
    }
 
 }
