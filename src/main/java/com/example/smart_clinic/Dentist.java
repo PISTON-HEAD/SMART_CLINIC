@@ -13,4 +13,14 @@ public class Dentist extends Doctor {
     public double calculateCharges() {
         return dentalProcedureFee;
     }
+
+    // Getter for dentalProcedureFee
+    public double getDentalProcedureFee() {
+        return dentalProcedureFee;
+    }
+
+    // Setter for dentalProcedureFee
+    public void setDentalProcedureFee(double dentalProcedureFee) {
+        this.dentalProcedureFee = dentalProcedureFee;
+    }
 }

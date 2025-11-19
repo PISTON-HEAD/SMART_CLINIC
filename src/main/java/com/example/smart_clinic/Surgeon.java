@@ -13,4 +13,12 @@ public class Surgeon extends Doctor {
     public double calculateCharges() {
         return surgeryFee;
     }
+
+    public double getSurgeryFee() {
+        return surgeryFee;
+    }
+
+    public void setSurgeryFee(int surgeryFee) {
+        this.surgeryFee = surgeryFee;
+    }
 }

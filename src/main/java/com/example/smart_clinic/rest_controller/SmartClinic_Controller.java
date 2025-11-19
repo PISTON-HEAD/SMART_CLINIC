@@ -13,26 +13,42 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.smart_clinic.Appointment;
+import com.example.smart_clinic.Dentist;
 import com.example.smart_clinic.Doctor;
+import com.example.smart_clinic.GeneralPhysician;
 import com.example.smart_clinic.Patient;
+import com.example.smart_clinic.Surgeon;
 import com.example.smart_clinic.service_layer.ClinicService;
 
 @RestController
 @RequestMapping("/clinic")
 public class SmartClinic_Controller {
 
- private ClinicService clinicService;
+ private final ClinicService clinicService;
 
  @Autowired
  public SmartClinic_Controller(ClinicService clinicService) {
   this.clinicService = clinicService;
  }
 
- // ================= Doctor Endpoints =================
-
  @PostMapping("/doctor/register")
- public Doctor registerDoctor(@RequestBody Doctor doctor) {
-  return clinicService.registerDoctor(doctor);
+ public Doctor registerDoctor(@RequestBody DoctorRecord record) {
+  Doctor doctorRegister;
+
+  switch (record.type()) {
+   case "Surgeon" ->
+    doctorRegister = new Surgeon(record.id(), record.name(), record.specialization(), record.yearsOfExperience(),
+      record.surgeryFee());
+   case "Dentist" ->
+    doctorRegister = new Dentist(record.id(), record.name(), record.specialization(), record.yearsOfExperience(),
+      record.dentalProcedureFee());
+   case "GeneralPhysician" ->
+    doctorRegister = new GeneralPhysician(record.id(), record.name(), record.specialization(),
+      record.yearsOfExperience(), record.consultationFee());
+   default -> throw new RuntimeException("Invalid doctor type");
+  }
+
+  return clinicService.registerDoctor(doctorRegister);
  }
 
  @GetMapping("/doctors")
@@ -64,7 +80,7 @@ public class SmartClinic_Controller {
  public Appointment bookAppointment(
    @RequestParam int doctorId,
    @RequestParam int patientId,
-   @RequestParam String date, // you might parse this to LocalDate in service
+   @RequestParam String date,
    @RequestParam String type) {
   return clinicService.bookAppointment(doctorId, patientId, date, type);
  }
@@ -82,5 +98,16 @@ public class SmartClinic_Controller {
  @GetMapping("/appointments/grouped/type")
  public Map<String, List<Appointment>> getAppointmentsGroupedByType() {
   return clinicService.getAppointmentsGroupedByType();
+ }
+
+ public record DoctorRecord(
+   int id,
+   String name,
+   String specialization,
+   int yearsOfExperience,
+   String type,
+   double surgeryFee,
+   double dentalProcedureFee,
+   double consultationFee) {
  }
 }

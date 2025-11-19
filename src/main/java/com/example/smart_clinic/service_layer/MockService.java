@@ -64,8 +64,6 @@ public class MockService implements ClinicService {
       if (verifiedDoctor == null || verifiedPatient == null) {
          return null;
       }
-
-      generateAppointmentId();
       Appointment appointment = new Appointment(generateAppointmentId(), date, type, verifiedPatient, verifiedDoctor);
 
       appointments.add(appointment);
@@ -103,8 +101,9 @@ public class MockService implements ClinicService {
 
    @Override
    public ArrayList<Patient> getAllPatients() {
-      patients.stream().sorted(Comparator.comparing(Patient::getName));
-      return patients;
+      return patients.stream()
+            .sorted(Comparator.comparing(Patient::getName))
+            .collect(Collectors.toCollection(ArrayList::new));
    }
 
    @Override
@@ -155,8 +154,11 @@ public class MockService implements ClinicService {
 
    @Override
    public ArrayList<Patient> getFrequentPatients(int minVisits) {
-      return appointments.stream().collect(Collectors.groupingBy(Appointment::getPatient)).entrySet().stream()
-            .filter(i -> i.getValue().size() >= minVisits).map(Map.Entry::getKey)
+      return appointments.stream()
+            .collect(Collectors.groupingBy(Appointment::getPatient))
+            .entrySet().stream()
+            .filter(i -> i.getValue().size() >= minVisits)
+            .map(Map.Entry::getKey)
             .collect(Collectors.toCollection(ArrayList::new));
    }
 

@@ -13,4 +13,14 @@ public class GeneralPhysician extends Doctor {
     public double calculateCharges() {
         return consultationFee;
     }
+
+    // Getter for consultationFee
+    public double getConsultationFee() {
+        return consultationFee;
+    }
+
+    // Setter for consultationFee
+    public void setConsultationFee(double consultationFee) {
+        this.consultationFee = consultationFee;
+    }
 }
